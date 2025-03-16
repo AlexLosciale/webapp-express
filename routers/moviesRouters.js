@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { index, show, destroy } from '../controllers/movisController';
+import { index, show, destroy } from '../controllers/moviesController.js';
 
 //rotte
 
