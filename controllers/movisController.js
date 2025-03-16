@@ -3,7 +3,7 @@ import connection from "../data/db";
 //index
 
 function index(req, res) {
-    const sql = 'SELECT * FROM movis';
+    const sql = 'SELECT * FROM movies';
 
     connection.query(sql, (err, results) => {
         if (err) {
@@ -28,7 +28,6 @@ function show(req, res) {
     const { id } = req.params;
 
     const movisSql = 'SELECT * FROM movis WHERE id= ?';
-
     const reviewsSql = 'SELECT * FROM reviews WHERE movis_id = ?';
 
     connection.query(movisSql, [id], (err, results) => {
