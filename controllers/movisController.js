@@ -3,7 +3,7 @@ import connection from "../data/db";
 //index
 
 function index(req, res) {
-    const sql = 'SELECT * FROM books';
+    const sql = 'SELECT * FROM movis';
 
     connection.query(sql, (err, results) => {
         if (err) {
@@ -11,7 +11,14 @@ function index(req, res) {
                 error: 'Errore lato server INDEX function',
             });
         }
-        res.json(results);
+
+        const movis = results.map((movis) => { 
+            return {
+              ...movis,
+              image: req.imagePath + movis.image,
+            };
+        });
+        res.json(movis);
     });
 };
 
@@ -44,6 +51,12 @@ function show(req, res) {
                 });
 
             movis.reviews = reviewsResults;
+
+            res.json({
+                ...movis,
+                image: req.imagePath + movis.image,
+            });
+
             res.json(movis);
         });
     });
