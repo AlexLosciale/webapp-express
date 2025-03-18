@@ -23,11 +23,10 @@ function index(req, res) {
 };
 
 //show
-
 function show(req, res) {
     const { id } = req.params;
 
-    const movisSql = 'SELECT * FROM movis WHERE id= ?';
+    const movisSql = 'SELECT * FROM movies WHERE id= ?';
     const reviewsSql = 'SELECT * FROM reviews WHERE movis_id = ?';
 
     connection.query(movisSql, [id], (err, results) => {
@@ -55,8 +54,6 @@ function show(req, res) {
                 ...movis,
                 image: req.imagePath + movis.image,
             });
-
-            res.json(movis);
         });
     });
 };
