@@ -6,14 +6,14 @@ import cors from 'cors';
 import dotenv from 'dotenv';  
 dotenv.config();
 
-app.use(
-    cors({
-        origin: process.FRONTEND_APP
-    })
-);
-
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
+
+app.use(
+    cors({
+        origin: process.env.FRONTEND_APP,
+    })
+);
 
 app.use(express.json());  
 app.use(setImagePath);
