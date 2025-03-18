@@ -1,9 +1,16 @@
 import express from 'express';
 import movieRouters from './routers/moviesRouters.js';
 import setImagePath from './middlewares/imagePath.js';
+import cors from 'cors';
 
 import dotenv from 'dotenv';  
 dotenv.config();
+
+app.use(
+    cors({
+        origin: process.FRONTEND_APP
+    })
+);
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
