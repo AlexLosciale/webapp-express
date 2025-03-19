@@ -26,33 +26,32 @@ function index(req, res) {
 function show(req, res) {
     const { id } = req.params;
 
-    const movisSql = 'SELECT * FROM movies WHERE id= ?';
-    const reviewsSql = 'SELECT * FROM reviews WHERE movis_id = ?';
+    const movieSql = 'SELECT * FROM movies WHERE id = ?';
+    const reviewsSql = 'SELECT * FROM reviews WHERE movie_id = ?';
 
-    connection.query(movisSql, [id], (err, results) => {
-        if (err)
-            return res.status(500).json({
-                error: 'Errore lato server SHOW function',
-            });
+    connection.query(movieSql, [id], (err, results) => {
+        if (err) {
+            console.error("Errore nella query del film:", err);
+            return res.status(500).json({ error: 'Errore lato server nella SHOW function' });
+        }
 
-        if (results.length === 0)
-            return res.status(404).json({
-                error: 'movis not found',
-            });
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Movie not found' });
+        }
 
-        const movis = results[0];
+        const movie = results[0];
 
         connection.query(reviewsSql, [id], (err, reviewsResults) => {
-            if (err)
-                return res.status(500).json({
-                    error: 'Errore lato server SHOW function',
-                });
+            if (err) {
+                console.error("Errore nella query delle recensioni:", err);
+                return res.status(500).json({ error: 'Errore lato server nella SHOW function' });
+            }
 
-            movis.reviews = reviewsResults;
+            movie.reviews = reviewsResults;
 
             res.json({
-                ...movis,
-                image: req.imagePath + movis.image,
+                ...movie,
+                image: req.imagePath ? req.imagePath + movie.image : movie.image,
             });
         });
     });
