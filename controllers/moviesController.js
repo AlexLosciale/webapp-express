@@ -12,13 +12,13 @@ function index(req, res) {
             });
         }
 
-        const movis = results.map((movis) => { 
+        const movies = results.map((movies) => { 
             return {
-              ...movis,
-              image: req.imagePath + movis.image,
+              ...movies,
+              image: req.imagePath + movies.image,
             };
         });
-        res.json(movis);
+        res.json(movies);
     });
 };
 
@@ -62,7 +62,7 @@ function show(req, res) {
 function destroy(req, res) {
     const { id } = req.params;
   
-    const sql = 'DELETE FROM movis WHERE id = ?';
+    const sql = 'DELETE FROM movies WHERE id = ?';
   
     connection.query(sql, [id], (err) => {
       if (err)
@@ -74,5 +74,26 @@ function destroy(req, res) {
     });
 };
 
-export { index, show, destroy };
+// storeReview
+
+function storeReview(req, res) {
+    const { movie_id, name, vote, text } = req.body;
+
+    if (!movie_id || !name || !vote || !text) {
+        return res.status(400).json({ error: "Tutti i campi sono obbligatori" });
+    }
+
+    const sql = 'INSERT INTO reviews (movie_id, name, vote, text, created_at) VALUES (?, ?, ?, ?, NOW())';
+
+    connection.query(sql, [movie_id, name, vote, text], (err, result) => {
+        if (err) {
+            console.error("Errore nell'inserimento della recensione:", err);
+            return res.status(500).json({ error: 'Errore lato server STORE REVIEW function' });
+        }
+
+        res.status(201).json({ message: "Recensione salvata con successo", id: result.insertId });
+    });
+}
+
+export { index, show, destroy, storeReview };
 
